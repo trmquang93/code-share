@@ -203,7 +203,7 @@ function App() {
             id="code-preview"
             style={{ 
               width: `${editorWidth}px`,
-              backgroundColor: 'transparent',
+              backgroundColor: exportSettings.backgroundColor,
               filter: 'none',
               position: 'relative'
             }}
@@ -261,6 +261,8 @@ function App() {
           onThemeChange={setSelectedTheme}
           selectedLanguage={selectedLanguage || detectLanguage(code)}
           onLanguageChange={setSelectedLanguage}
+          backgroundColor={exportSettings.backgroundColor}
+          onBackgroundColorChange={(color) => setExportSettings(prev => ({...prev, backgroundColor: color}))}
           exportSettings={exportSettings}
           onExportSettingsChange={setExportSettings}
           onExport={handleExport}

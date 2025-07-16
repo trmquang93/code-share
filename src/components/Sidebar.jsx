@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ThemeSelector from './ThemeSelector';
 import LanguageSelector from './LanguageSelector';
+import BackgroundSelector from './BackgroundSelector';
 import ExportPanel from './ExportPanel';
 
 const Sidebar = ({ 
@@ -8,6 +9,8 @@ const Sidebar = ({
   onThemeChange,
   selectedLanguage,
   onLanguageChange,
+  backgroundColor,
+  onBackgroundColorChange,
   exportSettings,
   onExportSettingsChange,
   onExport,
@@ -256,6 +259,12 @@ const Sidebar = ({
                 <LanguageSelector
                   selectedLanguage={selectedLanguage}
                   onLanguageChange={onLanguageChange}
+                  className="premium-control-item"
+                />
+                
+                <BackgroundSelector
+                  backgroundColor={backgroundColor}
+                  onBackgroundColorChange={onBackgroundColorChange}
                   className="premium-control-item"
                 />
                 

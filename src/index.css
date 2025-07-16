@@ -1588,28 +1588,97 @@ code {
 .premium-color-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+  gap: 12px;
+  padding: 4px;
+}
+
+/* Responsive grid layouts for mobile optimization */
+@media (max-width: 640px) {
+  .premium-color-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .premium-color-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
 }
 
 .premium-color-swatch {
-  width: 40px;
-  height: 40px;
+  /* Minimum 44px touch targets for mobile accessibility */
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Remove layout-shifting transforms */
+  transform: none;
 }
 
 .premium-color-swatch:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  border-width: 3px;
+}
+
+.premium-color-swatch:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3), 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.premium-color-swatch:focus-visible {
+  outline: 2px solid #4f46e5;
+  outline-offset: 2px;
 }
 
 .premium-color-swatch-selected {
   border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-  transform: scale(1.1);
+  border-width: 3px;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2), 0 4px 16px rgba(0, 0, 0, 0.15);
+  /* No layout-shifting transform */
+}
+
+.premium-color-swatch-checkmark {
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Enhanced checkmark visibility for light colors */
+.premium-color-swatch[style*="#FFFFFF"] .premium-color-swatch-checkmark,
+.premium-color-swatch[style*="#F5F5F5"] .premium-color-swatch-checkmark {
+  color: #1f1f1f;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Screen reader only utility class */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .premium-custom-color {

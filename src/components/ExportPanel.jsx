@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { exportFormats, defaultExportSettings } from '../utils/exportUtils';
 
 const ExportPanel = ({ 
@@ -8,8 +8,6 @@ const ExportPanel = ({
   isExporting = false,
   className = ''
 }) => {
-  const [customColor, setCustomColor] = useState(exportSettings.backgroundColor || defaultExportSettings.backgroundColor);
-
   const handleSettingChange = (key, value) => {
     onExportSettingsChange({
       ...exportSettings,
@@ -17,66 +15,8 @@ const ExportPanel = ({
     });
   };
 
-  const handleColorChange = (color) => {
-    setCustomColor(color);
-    handleSettingChange('backgroundColor', color);
-  };
-
-  const predefinedColors = [
-    { name: 'Light Gray', value: '#F5F5F5' },
-    { name: 'White', value: '#FFFFFF' },
-    { name: 'Dark Gray', value: '#1F1F1F' },
-    { name: 'Black', value: '#000000' },
-    { name: 'Blue', value: '#3B82F6' },
-    { name: 'Green', value: '#10B981' },
-    { name: 'Purple', value: '#8B5CF6' },
-    { name: 'Red', value: '#EF4444' }
-  ];
-
   return (
     <div className={`premium-export-panel ${className}`}>
-      {/* Background Color */}
-      <div className="premium-export-control">
-        <label className="premium-label">
-          Background Color
-        </label>
-        <div className="premium-color-controls">
-          {/* Predefined colors */}
-          <div className="premium-color-grid">
-            {predefinedColors.map((color) => (
-              <button
-                key={color.value}
-                onClick={() => handleColorChange(color.value)}
-                className={`premium-color-swatch ${
-                  exportSettings.backgroundColor === color.value 
-                    ? 'premium-color-swatch-selected' 
-                    : ''
-                }`}
-                style={{ backgroundColor: color.value }}
-                title={color.name}
-              />
-            ))}
-          </div>
-          
-          {/* Custom color picker */}
-          <div className="premium-custom-color">
-            <input
-              type="color"
-              value={customColor}
-              onChange={(e) => handleColorChange(e.target.value)}
-              className="premium-color-picker"
-            />
-            <input
-              type="text"
-              value={customColor}
-              onChange={(e) => handleColorChange(e.target.value)}
-              className="premium-color-input"
-              placeholder="#F5F5F5"
-            />
-          </div>
-        </div>
-      </div>
-
       {/* Image Width */}
       <div className="premium-export-control">
         <label className="premium-label">
