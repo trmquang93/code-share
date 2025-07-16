@@ -228,3 +228,141 @@ export function generateFilename(language, format) {
   const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
   return `code-snippet-${language}-${timestamp}.${format}`;
 }
+
+// Browser detection utilities
+const isSafari = () => {
+  return /^((?!chrome|android).)*safari/i.test(navigator?.userAgent);
+};
+
+const isFirefox = () => {
+  return navigator.userAgent.indexOf("Firefox") >= 0;
+};
+
+// Check clipboard API support
+export function checkClipboardSupport() {
+  const isHttps = window.location.protocol === 'https:' || window.location.hostname === 'localhost';
+  const hasClipboardAPI = 'clipboard' in navigator && 'write' in navigator.clipboard;
+  const hasClipboardItem = 'ClipboardItem' in window;
+  
+  return {
+    supported: isHttps && hasClipboardAPI && hasClipboardItem,
+    isHttps,
+    hasClipboardAPI,
+    hasClipboardItem,
+    browserWarnings: {
+      firefox: isFirefox(),
+      safari: isSafari()
+    }
+  };
+}
+
+export async function copyImageToClipboard(elementId, settings = {}) {
+  try {
+    // Check browser support first
+    const support = checkClipboardSupport();
+    
+    if (!support.supported) {
+      let message = 'Clipboard copying not supported: ';
+      if (!support.isHttps) message += 'HTTPS required. ';
+      if (!support.hasClipboardAPI) message += 'Clipboard API not available. ';
+      if (!support.hasClipboardItem) message += 'ClipboardItem not supported. ';
+      throw new Error(message + 'Please use the Export button instead.');
+    }
+
+    // Firefox has limited support
+    if (support.browserWarnings.firefox) {
+      throw new Error('Firefox has limited clipboard image support. Please use the Export button to download the image.');
+    }
+
+    const element = document.getElementById(elementId);
+    if (!element) {
+      throw new Error('Element not found');
+    }
+
+    // Check permissions
+    try {
+      const permission = await navigator.permissions.query({ name: 'clipboard-write' });
+      if (permission.state === 'denied') {
+        throw new Error('Clipboard permission denied. Please allow clipboard access in your browser settings.');
+      }
+    } catch (permError) {
+      // Permissions API might not be available, continue anyway
+      console.warn('Permission check failed:', permError);
+    }
+
+    // Safari requires special Promise-based handling
+    if (isSafari()) {
+      return await copyImageToClipboardSafari(element, settings);
+    } else {
+      return await copyImageToClipboardStandard(element, settings);
+    }
+    
+  } catch (error) {
+    console.error('Copy to clipboard failed:', error);
+    throw error;
+  }
+}
+
+// Safari-specific implementation
+async function copyImageToClipboardSafari(element, settings) {
+  const createImagePromise = () => {
+    return new Promise((resolve, reject) => {
+      exportCodeAsImage(element.id, settings).then(blob => {
+        if (blob) {
+          resolve(new Blob([blob], { type: "image/png" }));
+        } else {
+          reject(new Error('Failed to create image blob'));
+        }
+      }).catch(reject);
+    });
+  };
+
+  try {
+    await navigator.clipboard.write([
+      new ClipboardItem({
+        "image/png": createImagePromise()
+      })
+    ]);
+    
+    console.log('Image copied to clipboard successfully (Safari)');
+    return { success: true, message: 'Image copied to clipboard!' };
+  } catch (error) {
+    if (error.name === 'NotAllowedError') {
+      throw new Error('Clipboard access denied. Please allow clipboard access and try again.');
+    } else if (error.name === 'NotFoundError') {
+      throw new Error('Clipboard API not available. Please update your browser.');
+    } else {
+      throw new Error(`Copy failed: ${error.message}`);
+    }
+  }
+}
+
+// Standard implementation for Chrome and other browsers
+async function copyImageToClipboardStandard(element, settings) {
+  try {
+    const blob = await exportCodeAsImage(element.id, settings);
+    
+    if (!blob) {
+      throw new Error('Failed to generate image');
+    }
+
+    const clipboardItem = new ClipboardItem({
+      [blob.type]: blob
+    });
+
+    await navigator.clipboard.write([clipboardItem]);
+    console.log('Image copied to clipboard successfully');
+    return { success: true, message: 'Image copied to clipboard!' };
+    
+  } catch (error) {
+    if (error.name === 'NotAllowedError') {
+      throw new Error('Clipboard access denied. Please allow clipboard access and try again.');
+    } else if (error.name === 'SecurityError') {
+      throw new Error('Clipboard access requires HTTPS and user interaction.');
+    } else if (error.name === 'NotFoundError') {
+      throw new Error('Clipboard API not available. Please update your browser.');
+    } else {
+      throw new Error(`Copy failed: ${error.message}`);
+    }
+  }
+}
