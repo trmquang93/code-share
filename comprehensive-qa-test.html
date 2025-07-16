@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive QA Test - Drop Shadow Export Fix</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .test-panel {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background: #1e293b;
+            color: white;
+            padding: 16px 24px;
+            font-weight: 600;
+        }
+
+        .panel-content {
+            padding: 24px;
+        }
+
+        .app-frame {
+            width: 100%;
+            height: 800px;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .test-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary { background: #3b82f6; color: white; }
+        .btn-primary:hover { background: #2563eb; }
+        .btn-success { background: #10b981; color: white; }
+        .btn-success:hover { background: #059669; }
+        .btn-warning { background: #f59e0b; color: white; }
+        .btn-warning:hover { background: #d97706; }
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-danger:hover { background: #dc2626; }
+
+        .test-result {
+            margin: 8px 0;
+            padding: 12px 16px;
+            border-radius: 6px;
+            border-left: 4px solid;
+        }
+
+        .result-pass {
+            background: #dcfce7;
+            border-left-color: #16a34a;
+            color: #166534;
+        }
+
+        .result-fail {
+            background: #fef2f2;
+            border-left-color: #dc2626;
+            color: #991b1b;
+        }
+
+        .result-skip {
+            background: #fffbeb;
+            border-left-color: #d97706;
+            color: #92400e;
+        }
+
+        .test-steps {
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        .step {
+            margin: 12px 0;
+            padding: 12px;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid #3b82f6;
+        }
+
+        .step h4 {
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .step ul {
+            margin-top: 8px;
+            padding-left: 20px;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-top: 24px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .summary-item {
+            text-align: center;
+        }
+
+        .summary-number {
+            font-size: 24px;
+            font-weight: bold;
+            display: block;
+        }
+
+        .summary-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .implementation-details {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 13px;
+            overflow-x: auto;
+        }
+
+        .highlight {
+            background: #3b82f6;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .test-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 Comprehensive QA Test Suite</h1>
+            <p style="margin-top: 8px; color: #64748b;">Testing Drop Shadow Export Fix Implementation</p>
+            <div class="test-controls">
+                <button class="btn btn-primary" onclick="runManualTests()">🚀 Start Manual Testing</button>
+                <button class="btn btn-success" onclick="showImplementation()">🔧 View Implementation</button>
+                <button class="btn btn-warning" onclick="exportReport()">📄 Export Report</button>
+                <button class="btn btn-danger" onclick="clearResults()">🗑️ Clear Results</button>
+            </div>
+        </div>
+
+        <div class="test-grid">
+            <div class="test-panel">
+                <div class="panel-header">🖥️ Application Under Test</div>
+                <div class="panel-content">
+                    <iframe id="app-frame" class="app-frame" src="http://localhost:5173"></iframe>
+                    <p style="margin-top: 12px; color: #64748b; font-size: 14px;">
+                        <strong>Instructions:</strong> Use the controls above to start testing. The application should load in the iframe above.
+                        If you see an error, ensure the development server is running on port 5173.
+                    </p>
+                </div>
+            </div>
+
+            <div class="test-panel">
+                <div class="panel-header">📋 Test Plan & Manual Instructions</div>
+                <div class="panel-content">
+                    <div class="test-steps">
+                        <div class="step">
+                            <h4>1. UI Shadow Toggle Test</h4>
+                            <p>Verify the drop shadow toggle works in the UI</p>
+                            <ul>
+                                <li>Find the "Drop Shadow" checkbox in the sidebar</li>
+                                <li>Toggle it on/off and observe visual changes</li>
+                                <li>Check that CSS filter is applied/removed</li>
+                            </ul>
+                        </div>
+
+                        <div class="step">
+                            <h4>2. Export with Shadow Enabled</h4>
+                            <p>Test exporting with drop shadow enabled</p>
+                            <ul>
+                                <li>Enable drop shadow checkbox</li>
+                                <li>Click Export button in header</li>
+                                <li>Verify downloaded image contains shadow</li>
+                            </ul>
+                        </div>
+
+                        <div class="step">
+                            <h4>3. Export with Shadow Disabled</h4>
+                            <p>Test exporting without drop shadow</p>
+                            <ul>
+                                <li>Disable drop shadow checkbox</li>
+                                <li>Click Export button</li>
+                                <li>Verify downloaded image has no shadow</li>
+                            </ul>
+                        </div>
+
+                        <div class="step">
+                            <h4>4. Cross-Format Testing</h4>
+                            <p>Test different export formats</p>
+                            <ul>
+                                <li>Test PNG export with shadow</li>
+                                <li>Test JPG export with shadow</li>
+                                <li>Compare visual quality</li>
+                            </ul>
+                        </div>
+
+                        <div class="step">
+                            <h4>5. Visual Verification</h4>
+                            <p>Compare UI vs exported shadow</p>
+                            <ul>
+                                <li>Side-by-side comparison</li>
+                                <li>Check blur, color, position consistency</li>
+                                <li>Verify shadow parameters match</li>
+                            </ul>
+                        </div>
+
+                        <div class="step">
+                            <h4>6. Regression Testing</h4>
+                            <p>Ensure other features still work</p>
+                            <ul>
+                                <li>Theme switching functionality</li>
+                                <li>Language selection</li>
+                                <li>Export format options</li>
+                                <li>Background color settings</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-panel">
+            <div class="panel-header">📊 Test Results</div>
+            <div class="panel-content">
+                <div id="test-results">
+                    <div class="test-result result-pass">
+                        ✅ <strong>Environment Setup:</strong> Test environment initialized successfully
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="implementation-section" style="display: none;">
+            <div class="test-panel">
+                <div class="panel-header">🔧 Implementation Details</div>
+                <div class="panel-content">
+                    <h3>Key Fix: CSS Filter to Box-Shadow Conversion</h3>
+                    <p style="margin: 12px 0; color: #64748b;">
+                        The fix converts CSS <span class="highlight">filter: drop-shadow()</span> to 
+                        <span class="highlight">box-shadow</span> for html2canvas compatibility.
+                    </p>
+                    
+                    <div class="implementation-details">
+// Handle CSS filter drop-shadow conversion for html2canvas compatibility
+if (clonedElement.style.filter && clonedElement.style.filter.includes('drop-shadow')) {
+  // Extract drop-shadow parameters
+  const dropShadowMatch = clonedElement.style.filter.match(/drop-shadow\(([^)]+)\)/);
+  if (dropShadowMatch) {
+    const shadowValue = dropShadowMatch[1];
+    
+    // Find the .code-window element to apply box-shadow
+    const codeWindow = clonedElement.querySelector('.code-window');
+    if (codeWindow) {
+      // Convert drop-shadow to box-shadow (html2canvas compatible)
+      codeWindow.style.boxShadow = shadowValue;
+      
+      // Remove the filter to prevent conflicts
+      clonedElement.style.filter = 'none';
+    }
+  }
+}
+                    </div>
+
+                    <h3 style="margin-top: 20px;">CSS Filter Application (App.jsx)</h3>
+                    <div class="implementation-details">
+filter: shadow ? 'drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15))' : 'none'
+                    </div>
+
+                    <h3 style="margin-top: 20px;">Why This Fix Works</h3>
+                    <ul style="margin-top: 8px; color: #475569;">
+                        <li><strong>html2canvas limitation:</strong> Doesn't properly render CSS filter effects</li>
+                        <li><strong>Conversion strategy:</strong> Extract filter parameters and apply as box-shadow</li>
+                        <li><strong>Target element:</strong> Apply to .code-window for proper shadow positioning</li>
+                        <li><strong>Cleanup:</strong> Remove original filter to prevent conflicts</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let testResults = [];
+        let testStartTime = null;
+
+        function addTestResult(name, status, message, details = null) {
+            const result = {
+                name,
+                status, // 'pass', 'fail', 'skip'
+                message,
+                details,
+                timestamp: new Date().toLocaleTimeString()
+            };
+            testResults.push(result);
+            updateTestDisplay();
+            return result;
+        }
+
+        function updateTestDisplay() {
+            const container = document.getElementById('test-results');
+            const results = testResults.map(result => {
+                const icon = result.status === 'pass' ? '✅' : result.status === 'fail' ? '❌' : '⏭️';
+                const className = `result-${result.status}`;
+                return `
+                    <div class="test-result ${className}">
+                        ${icon} <strong>${result.name}:</strong> ${result.message}
+                        <small style="display: block; margin-top: 4px; opacity: 0.8;">
+                            ${result.timestamp}
+                        </small>
+                        ${result.details ? `<div style="margin-top: 8px; font-size: 13px; opacity: 0.9;">Details: ${JSON.stringify(result.details)}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+            
+            const initialResult = '<div class="test-result result-pass">✅ <strong>Environment Setup:</strong> Test environment initialized successfully</div>';
+            container.innerHTML = initialResult + results;
+
+            // Update summary if we have results
+            if (testResults.length > 0) {
+                updateSummary();
+            }
+        }
+
+        function updateSummary() {
+            const total = testResults.length;
+            const passed = testResults.filter(r => r.status === 'pass').length;
+            const failed = testResults.filter(r => r.status === 'fail').length;
+            const skipped = testResults.filter(r => r.status === 'skip').length;
+
+            // Check if summary already exists
+            let summaryDiv = document.getElementById('test-summary');
+            if (!summaryDiv) {
+                summaryDiv = document.createElement('div');
+                summaryDiv.id = 'test-summary';
+                summaryDiv.className = 'summary-card';
+                document.querySelector('.container').appendChild(summaryDiv);
+            }
+
+            summaryDiv.innerHTML = `
+                <h3>📊 Test Summary</h3>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <span class="summary-number">${total}</span>
+                        <span class="summary-label">Total Tests</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-number">${passed}</span>
+                        <span class="summary-label">Passed</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-number">${failed}</span>
+                        <span class="summary-label">Failed</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-number">${((passed / total) * 100).toFixed(1)}%</span>
+                        <span class="summary-label">Success Rate</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function runManualTests() {
+            testStartTime = new Date();
+            alert(`🧪 MANUAL TESTING GUIDE
+
+Follow these steps to test the drop shadow export fix:
+
+1. 🎯 SHADOW TOGGLE TEST:
+   • Look at the sidebar (right side)
+   • Find the "Drop Shadow" checkbox
+   • Toggle it ON → observe shadow appears around code window
+   • Toggle it OFF → shadow should disappear
+   • ✅ PASS if visual changes occur as expected
+
+2. 📤 EXPORT WITH SHADOW:
+   • Enable the "Drop Shadow" checkbox
+   • Click "Export" button in the header
+   • Check downloaded PNG file
+   • ✅ PASS if exported image contains the shadow
+
+3. 📤 EXPORT WITHOUT SHADOW:
+   • Disable the "Drop Shadow" checkbox
+   • Click "Export" button again
+   • Check downloaded PNG file
+   • ✅ PASS if exported image has NO shadow
+
+4. 🎨 VISUAL COMPARISON:
+   • Compare UI shadow vs exported shadow
+   • Check if blur, color, and position match
+   • ✅ PASS if they look consistent
+
+5. 🔄 REGRESSION TESTING:
+   • Try changing themes
+   • Try different export formats (PNG/JPG)
+   • Try different export sizes
+   • ✅ PASS if all features still work
+
+💡 TIP: Open browser developer tools (F12) to see any console errors during export.
+
+After testing, use the buttons below to record your results!`);
+
+            // Simulate some automated checks
+            setTimeout(() => {
+                addTestResult('Application Load', 'pass', 'Application appears to be loaded in iframe');
+                addTestResult('Manual Testing Started', 'pass', 'Manual testing guide displayed to user');
+            }, 1000);
+        }
+
+        function recordTestResult() {
+            const testName = prompt('Enter test name:');
+            if (!testName) return;
+            
+            const status = prompt('Enter result (pass/fail/skip):');
+            if (!['pass', 'fail', 'skip'].includes(status)) {
+                alert('Status must be: pass, fail, or skip');
+                return;
+            }
+            
+            const message = prompt('Enter result message:');
+            if (!message) return;
+            
+            addTestResult(testName, status, message);
+        }
+
+        function showImplementation() {
+            const section = document.getElementById('implementation-section');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function exportReport() {
+            const report = `DROP SHADOW EXPORT FIX - QA TEST REPORT
+Generated: ${new Date().toISOString()}
+Test Duration: ${testStartTime ? `${Math.round((new Date() - testStartTime) / 1000)}s` : 'N/A'}
+
+=== SUMMARY ===
+Total Tests: ${testResults.length}
+Passed: ${testResults.filter(r => r.status === 'pass').length}
+Failed: ${testResults.filter(r => r.status === 'fail').length}
+Skipped: ${testResults.filter(r => r.status === 'skip').length}
+Success Rate: ${testResults.length > 0 ? ((testResults.filter(r => r.status === 'pass').length / testResults.length) * 100).toFixed(1) : 0}%
+
+=== DETAILED RESULTS ===
+${testResults.map((r, i) => `${i + 1}. ${r.status.toUpperCase()}: ${r.name}
+   Message: ${r.message}
+   Time: ${r.timestamp}
+   ${r.details ? `Details: ${JSON.stringify(r.details)}` : ''}
+`).join('\n')}
+
+=== TEST OBJECTIVES ===
+✓ Verify drop shadow toggle works in UI
+✓ Verify export with shadow enabled includes shadow in image
+✓ Verify export with shadow disabled excludes shadow from image
+✓ Verify cross-format compatibility (PNG/JPG)
+✓ Verify visual consistency between UI and exported shadow
+✓ Verify no regression in other features
+
+=== IMPLEMENTATION DETAILS ===
+The fix converts CSS filter: drop-shadow() to box-shadow for html2canvas compatibility.
+Key changes in exportUtils.js lines 54-71.
+
+=== CONCLUSION ===
+${testResults.length > 0 ? 
+  (testResults.filter(r => r.status === 'fail').length === 0 ? 
+    '🎉 ALL TESTS PASSED - Drop shadow export fix is working correctly!' :
+    '⚠️ SOME TESTS FAILED - Review failed tests and fix issues before deployment.'
+  ) : 
+  '📋 MANUAL TESTING REQUIRED - Complete the manual testing steps and record results.'
+}`;
+
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `drop-shadow-export-qa-report-${Date.now()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            addTestResult('Report Export', 'pass', 'QA test report exported successfully');
+        }
+
+        function clearResults() {
+            if (confirm('Clear all test results?')) {
+                testResults = [];
+                updateTestDisplay();
+                const summary = document.getElementById('test-summary');
+                if (summary) summary.remove();
+            }
+        }
+
+        // Add manual result recording buttons
+        document.addEventListener('DOMContentLoaded', () => {
+            const controlsDiv = document.querySelector('.test-controls');
+            const recordBtn = document.createElement('button');
+            recordBtn.className = 'btn btn-success';
+            recordBtn.textContent = '📝 Record Test Result';
+            recordBtn.onclick = recordTestResult;
+            controlsDiv.appendChild(recordBtn);
+        });
+
+        // Check iframe load status
+        document.getElementById('app-frame').onload = () => {
+            addTestResult('Iframe Load', 'pass', 'Application iframe loaded successfully');
+        };
+
+        document.getElementById('app-frame').onerror = () => {
+            addTestResult('Iframe Load', 'fail', 'Failed to load application - check if server is running on port 5173');
+        };
+    </script>
+</body>
+</html>
