@@ -202,8 +202,9 @@ function App() {
           <div 
             id="code-preview"
             style={{ 
-              width: `${editorWidth}px`,
-              backgroundColor: exportSettings.backgroundColor,
+              width: `${editorWidth + (exportSettings.padding * 2)}px`,
+              backgroundColor: exportSettings.padding === 0 ? 'transparent' : exportSettings.backgroundColor,
+              padding: `${exportSettings.padding}px`,
               filter: 'none',
               position: 'relative'
             }}

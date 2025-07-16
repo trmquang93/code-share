@@ -33,7 +33,7 @@ export async function exportCodeAsImage(elementId, settings = {}) {
 
     // Configure html2canvas options - simplified approach
     const options = {
-      backgroundColor: finalSettings.backgroundColor,
+      backgroundColor: finalSettings.padding === 0 ? null : finalSettings.backgroundColor,
       scale: 2, // High DPI for quality
       useCORS: true,
       allowTaint: true,
