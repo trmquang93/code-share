@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ThemeSelector from './ThemeSelector';
 import LanguageSelector from './LanguageSelector';
-import BackgroundSelector from './BackgroundSelector';
 import ExportPanel from './ExportPanel';
 
 const Sidebar = ({ 
@@ -262,11 +261,6 @@ const Sidebar = ({
                   className="premium-control-item"
                 />
                 
-                <BackgroundSelector
-                  backgroundColor={backgroundColor}
-                  onBackgroundColorChange={onBackgroundColorChange}
-                  className="premium-control-item"
-                />
                 
                 {/* Width Control */}
                 <div className="premium-control-item">
@@ -384,6 +378,8 @@ const Sidebar = ({
                 onExportSettingsChange={onExportSettingsChange}
                 onExport={onExport}
                 isExporting={isExporting}
+                backgroundColor={backgroundColor}
+                onBackgroundColorChange={onBackgroundColorChange}
                 className="premium-export-panel"
               />
             </div>

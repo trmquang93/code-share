@@ -1,11 +1,14 @@
 import React from 'react';
 import { exportFormats, defaultExportSettings } from '../utils/exportUtils';
+import BackgroundSelector from './BackgroundSelector';
 
 const ExportPanel = ({ 
   exportSettings, 
   onExportSettingsChange, 
   onExport, 
   isExporting = false,
+  backgroundColor,
+  onBackgroundColorChange,
   className = ''
 }) => {
   const handleSettingChange = (key, value) => {
@@ -17,6 +20,13 @@ const ExportPanel = ({
 
   return (
     <div className={`premium-export-panel ${className}`}>
+      {/* Background Color */}
+      <BackgroundSelector
+        backgroundColor={backgroundColor}
+        onBackgroundColorChange={onBackgroundColorChange}
+        className="premium-export-control"
+      />
+
       {/* Image Width */}
       <div className="premium-export-control">
         <label className="premium-label">
