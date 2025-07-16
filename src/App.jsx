@@ -16,11 +16,21 @@ function App() {
   const [isExporting, setIsExporting] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
   const [clipboardSupport, setClipboardSupport] = useState(null);
+  const [editorWidth, setEditorWidth] = useState(600);
+  const [isDragging, setIsDragging] = useState(false);
 
   // Check clipboard support on mount
   useEffect(() => {
     const support = checkClipboardSupport();
     setClipboardSupport(support);
+  }, []);
+
+  // Cleanup event listeners on unmount
+  useEffect(() => {
+    return () => {
+      document.removeEventListener('mousemove', () => {});
+      document.removeEventListener('mouseup', () => {});
+    };
   }, []);
 
   const handleExport = async () => {
@@ -71,6 +81,28 @@ function App() {
     } finally {
       setIsCopying(false);
     }
+  };
+
+  // Resize functionality
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    const startX = e.clientX;
+    const startWidth = editorWidth;
+    
+    const handleMouseMove = (e) => {
+      const deltaX = e.clientX - startX;
+      const newWidth = Math.max(400, Math.min(1200, startWidth + deltaX));
+      setEditorWidth(newWidth);
+    };
+    
+    const handleMouseUp = () => {
+      setIsDragging(false);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+    
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
   };
 
   // Enhanced notification function with better UX
@@ -146,15 +178,16 @@ function App() {
           padding: '32px', 
           display: 'flex', 
           alignItems: 'center', 
-          justifyContent: 'center' 
+          justifyContent: 'center',
+          position: 'relative'
         }}>
           <div 
             id="code-preview"
             style={{ 
-              width: '100%',
-              maxWidth: '896px',
+              width: `${editorWidth}px`,
               backgroundColor: 'transparent',
-              filter: 'none'
+              filter: 'none',
+              position: 'relative'
             }}
           >
             <MacOSWindow theme={selectedTheme}>
@@ -166,6 +199,33 @@ function App() {
                 placeholder={placeholderText}
               />
             </MacOSWindow>
+            
+            {/* Resize Handle */}
+            <div
+              style={{
+                position: 'absolute',
+                right: '-2px',
+                top: '0',
+                bottom: '0',
+                width: '4px',
+                backgroundColor: isDragging ? '#3B82F6' : 'transparent',
+                cursor: 'col-resize',
+                zIndex: 10,
+                opacity: isDragging ? 1 : 0,
+                transition: 'opacity 0.2s ease'
+              }}
+              onMouseDown={handleMouseDown}
+              onMouseEnter={(e) => {
+                e.target.style.opacity = '0.5';
+                e.target.style.backgroundColor = '#3B82F6';
+              }}
+              onMouseLeave={(e) => {
+                if (!isDragging) {
+                  e.target.style.opacity = '0';
+                  e.target.style.backgroundColor = 'transparent';
+                }
+              }}
+            />
           </div>
         </div>
         
@@ -178,6 +238,8 @@ function App() {
           onExportSettingsChange={setExportSettings}
           onExport={handleExport}
           isExporting={isExporting}
+          editorWidth={editorWidth}
+          onEditorWidthChange={setEditorWidth}
         />
       </div>
     </div>

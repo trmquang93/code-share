@@ -12,6 +12,8 @@ const Sidebar = ({
   onExportSettingsChange,
   onExport,
   isExporting,
+  editorWidth,
+  onEditorWidthChange,
   className = ''
 }) => {
   return (
@@ -29,6 +31,26 @@ const Sidebar = ({
             selectedLanguage={selectedLanguage}
             onLanguageChange={onLanguageChange}
           />
+          
+          {/* Width Control */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Editor Width
+            </label>
+            <div className="space-y-2">
+              <input
+                type="range"
+                min="400"
+                max="1200"
+                value={editorWidth}
+                onChange={(e) => onEditorWidthChange(Number(e.target.value))}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+              />
+              <div className="text-xs text-gray-500 text-center">
+                {editorWidth}px
+              </div>
+            </div>
+          </div>
           
         </div>
       </div>
