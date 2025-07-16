@@ -6,27 +6,27 @@ const ThemeSelector = ({ selectedTheme, onThemeChange, className = '' }) => {
   const lightThemes = Object.entries(themes).filter(([_, theme]) => theme.type === 'light');
 
   return (
-    <div className={`space-y-4 ${className}`}>
+    <div className={`premium-theme-selector ${className}`}>
       <div>
-        <h3 className="text-sm font-medium text-gray-700 mb-2">Theme</h3>
-        <div className="space-y-3">
+        <h3 className="premium-label">Theme</h3>
+        <div className="premium-theme-groups">
           {/* Dark Themes */}
-          <div>
-            <h4 className="text-xs text-gray-500 mb-2">Dark Themes</h4>
-            <div className="space-y-1">
+          <div className="premium-theme-group">
+            <h4 className="premium-theme-group-title">Dark Themes</h4>
+            <div className="premium-theme-options">
               {darkThemes.map(([key, theme]) => (
-                <label key={key} className="flex items-center space-x-2 cursor-pointer">
+                <label key={key} className={`premium-theme-option ${selectedTheme === key ? 'premium-theme-option-selected' : ''}`}>
                   <input
                     type="radio"
                     name="theme"
                     value={key}
                     checked={selectedTheme === key}
                     onChange={() => onThemeChange(key)}
-                    className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                    className="premium-theme-radio"
                   />
-                  <span className="text-sm text-gray-700">{theme.name}</span>
+                  <span className="premium-theme-name">{theme.name}</span>
                   <div 
-                    className="w-4 h-4 rounded border border-gray-300 ml-auto"
+                    className="premium-theme-preview"
                     style={{ backgroundColor: theme.windowBg }}
                   />
                 </label>
@@ -35,22 +35,22 @@ const ThemeSelector = ({ selectedTheme, onThemeChange, className = '' }) => {
           </div>
 
           {/* Light Themes */}
-          <div>
-            <h4 className="text-xs text-gray-500 mb-2">Light Themes</h4>
-            <div className="space-y-1">
+          <div className="premium-theme-group">
+            <h4 className="premium-theme-group-title">Light Themes</h4>
+            <div className="premium-theme-options">
               {lightThemes.map(([key, theme]) => (
-                <label key={key} className="flex items-center space-x-2 cursor-pointer">
+                <label key={key} className={`premium-theme-option ${selectedTheme === key ? 'premium-theme-option-selected' : ''}`}>
                   <input
                     type="radio"
                     name="theme"
                     value={key}
                     checked={selectedTheme === key}
                     onChange={() => onThemeChange(key)}
-                    className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                    className="premium-theme-radio"
                   />
-                  <span className="text-sm text-gray-700">{theme.name}</span>
+                  <span className="premium-theme-name">{theme.name}</span>
                   <div 
-                    className="w-4 h-4 rounded border border-gray-300 ml-auto"
+                    className="premium-theme-preview"
                     style={{ backgroundColor: theme.windowBg }}
                   />
                 </label>

@@ -18,6 +18,9 @@ function App() {
   const [clipboardSupport, setClipboardSupport] = useState(null);
   const [editorWidth, setEditorWidth] = useState(600);
   const [isDragging, setIsDragging] = useState(false);
+  const [showLineNumbers, setShowLineNumbers] = useState(true);
+  const [startLineNumber, setStartLineNumber] = useState(1);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Check clipboard support on mount
   useEffect(() => {
@@ -170,6 +173,7 @@ function App() {
         onCopy={clipboardSupport?.supported ? handleCopy : null}
         isCopying={isCopying}
         clipboardSupport={clipboardSupport}
+        sidebarCollapsed={sidebarCollapsed}
       />
       
       <div style={{ flex: '1', display: 'flex' }}>
@@ -197,6 +201,8 @@ function App() {
                 language={selectedLanguage}
                 theme={selectedTheme}
                 placeholder={placeholderText}
+                showLineNumbers={showLineNumbers}
+                startLineNumber={startLineNumber}
               />
             </MacOSWindow>
             
@@ -240,6 +246,11 @@ function App() {
           isExporting={isExporting}
           editorWidth={editorWidth}
           onEditorWidthChange={setEditorWidth}
+          showLineNumbers={showLineNumbers}
+          onShowLineNumbersChange={setShowLineNumbers}
+          startLineNumber={startLineNumber}
+          onStartLineNumberChange={setStartLineNumber}
+          onCollapseChange={setSidebarCollapsed}
         />
       </div>
     </div>

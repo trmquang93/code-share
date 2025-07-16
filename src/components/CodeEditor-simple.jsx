@@ -18,7 +18,9 @@ const CodeEditor = ({
   language, 
   theme = 'vs-dark',
   placeholder = 'Paste your code here...',
-  className = ''
+  className = '',
+  showLineNumbers = true,
+  startLineNumber = 1
 }) => {
   const textareaRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -184,7 +186,16 @@ const CodeEditor = ({
                   lineHeight: '1.5'
                 }
               }}
-              showLineNumbers={false}
+              showLineNumbers={showLineNumbers}
+              startingLineNumber={startLineNumber}
+              lineNumberStyle={{
+                color: currentTheme.type === 'dark' ? '#6B7280' : '#9CA3AF',
+                fontSize: '14px',
+                fontFamily: 'SF Mono, Monaco, Inconsolata, Roboto Mono, Source Code Pro, Menlo, Consolas, monospace',
+                paddingRight: '16px',
+                textAlign: 'right',
+                userSelect: 'none'
+              }}
               wrapLines={true}
               wrapLongLines={true}
             >
