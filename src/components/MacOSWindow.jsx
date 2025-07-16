@@ -4,7 +4,6 @@ import { themes } from '../data/themes';
 const MacOSWindow = ({ 
   children, 
   theme = 'vs-dark', 
-  shadow = false,
   className = '',
   ...props 
 }) => {
@@ -12,7 +11,7 @@ const MacOSWindow = ({
   
   return (
     <div 
-      className={`code-window ${shadow ? 'shadow-2xl' : ''} ${className}`}
+      className={`code-window ${className}`}
       style={{ backgroundColor: currentTheme.windowBg }}
       {...props}
     >

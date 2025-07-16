@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Header from './components/Header';
 import MacOSWindow from './components/MacOSWindow';
 import CodeEditor from './components/CodeEditor-simple';
@@ -12,7 +12,6 @@ function App() {
   const [code, setCode] = useState(sampleCode);
   const [selectedTheme, setSelectedTheme] = useState(defaultTheme);
   const [selectedLanguage, setSelectedLanguage] = useState(null);
-  const [shadow, setShadow] = useState(false);
   const [exportSettings, setExportSettings] = useState(defaultExportSettings);
   const [isExporting, setIsExporting] = useState(false);
 
@@ -27,8 +26,7 @@ function App() {
       
       const currentLanguage = selectedLanguage || detectLanguage(code);
       const finalExportSettings = {
-        ...exportSettings,
-        shadow
+        ...exportSettings
       };
       
       const blob = await exportCodeAsImage('code-preview', finalExportSettings);
@@ -69,10 +67,10 @@ function App() {
               width: '100%',
               maxWidth: '896px',
               backgroundColor: 'transparent',
-              filter: shadow ? 'drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15))' : 'none'
+              filter: 'none'
             }}
           >
-            <MacOSWindow theme={selectedTheme} shadow={false}>
+            <MacOSWindow theme={selectedTheme}>
               <CodeEditor
                 code={code}
                 onChange={setCode}
@@ -93,8 +91,6 @@ function App() {
           onExportSettingsChange={setExportSettings}
           onExport={handleExport}
           isExporting={isExporting}
-          shadow={shadow}
-          onShadowChange={setShadow}
         />
       </div>
     </div>

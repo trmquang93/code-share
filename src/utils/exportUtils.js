@@ -10,7 +10,6 @@ export const defaultExportSettings = {
   width: 1920,
   backgroundColor: '#F5F5F5',
   padding: 64,
-  shadow: false,
   quality: 1.0
 };
 
@@ -44,12 +43,18 @@ export async function exportCodeAsImage(elementId, settings = {}) {
         // Ensure all styles are preserved in the cloned document
         const clonedElement = clonedDoc.getElementById(elementId);
         if (clonedElement) {
+          let effectivePadding = finalSettings.padding;
+          
           // Apply padding and positioning
-          clonedElement.style.margin = `${finalSettings.padding}px`;
+          clonedElement.style.padding = `${effectivePadding}px`;
+          clonedElement.style.margin = '0';
           clonedElement.style.transform = 'none';
           clonedElement.style.position = 'static';
           clonedElement.style.display = 'block';
           clonedElement.style.visibility = 'visible';
+          
+          // Remove any CSS filter to prevent conflicts
+          clonedElement.style.filter = 'none';
           
           // Ensure fonts are properly loaded
           const originalTextareas = element.querySelectorAll('textarea');
@@ -94,7 +99,6 @@ export async function exportCodeAsImage(elementId, settings = {}) {
           if (codeWindow) {
             codeWindow.style.borderRadius = '8px';
             codeWindow.style.overflow = 'hidden';
-            codeWindow.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)';
             codeWindow.style.display = 'block';
           }
           

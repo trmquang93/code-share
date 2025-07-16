@@ -12,8 +12,6 @@ const Sidebar = ({
   onExportSettingsChange,
   onExport,
   isExporting,
-  shadow,
-  onShadowChange,
   className = ''
 }) => {
   return (
@@ -32,17 +30,6 @@ const Sidebar = ({
             onLanguageChange={onLanguageChange}
           />
           
-          <div>
-            <label className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                checked={shadow}
-                onChange={(e) => onShadowChange(e.target.checked)}
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-              />
-              <span className="text-sm font-medium text-gray-700">Drop Shadow</span>
-            </label>
-          </div>
         </div>
       </div>
 
