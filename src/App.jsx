@@ -20,6 +20,11 @@ function App() {
     setIsExporting(true);
     
     try {
+      const element = document.getElementById('code-preview');
+      if (!element) {
+        throw new Error('Export element not found');
+      }
+      
       const currentLanguage = selectedLanguage || detectLanguage(code);
       const finalExportSettings = {
         ...exportSettings,
@@ -32,6 +37,7 @@ function App() {
       
     } catch (error) {
       console.error('Export failed:', error);
+      alert(`Export failed: ${error.message}`);
     } finally {
       setIsExporting(false);
     }
