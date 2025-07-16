@@ -6,7 +6,7 @@ import Sidebar from './components/Sidebar';
 import { sampleCode, placeholderText } from './data/sampleCode';
 import { defaultTheme } from './data/themes';
 import { detectLanguage } from './data/languages';
-import { defaultExportSettings, exportCodeAsImage, downloadBlob, generateFilename, copyImageToClipboard, checkClipboardSupport } from './utils/exportUtils';
+import { defaultExportSettings, exportCodeAsImage, downloadBlob, generateFilename, generateDisplayFilename, copyImageToClipboard, checkClipboardSupport } from './utils/exportUtils';
 
 function App() {
   const [code, setCode] = useState(sampleCode);
@@ -21,12 +21,26 @@ function App() {
   const [showLineNumbers, setShowLineNumbers] = useState(true);
   const [startLineNumber, setStartLineNumber] = useState(1);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [filename, setFilename] = useState('');
+  const [isEditingFilename, setIsEditingFilename] = useState(false);
+  const [showFilename, setShowFilename] = useState(true);
 
   // Check clipboard support on mount
   useEffect(() => {
     const support = checkClipboardSupport();
     setClipboardSupport(support);
   }, []);
+
+  // Auto-update filename when language changes
+  useEffect(() => {
+    const currentLanguage = selectedLanguage || detectLanguage(code);
+    const generatedFilename = generateDisplayFilename(currentLanguage);
+    
+    // Only update if user hasn't manually set a filename
+    if (!filename || filename === generateDisplayFilename(detectLanguage(code))) {
+      setFilename(generatedFilename);
+    }
+  }, [selectedLanguage, code, filename]);
 
   // Cleanup event listeners on unmount
   useEffect(() => {
@@ -194,7 +208,14 @@ function App() {
               position: 'relative'
             }}
           >
-            <MacOSWindow theme={selectedTheme}>
+            <MacOSWindow 
+              theme={selectedTheme}
+              filename={filename}
+              onFilenameChange={setFilename}
+              isEditingFilename={isEditingFilename}
+              onEditingFilenameChange={setIsEditingFilename}
+              showFilename={showFilename}
+            >
               <CodeEditor
                 code={code}
                 onChange={setCode}
@@ -250,6 +271,10 @@ function App() {
           onShowLineNumbersChange={setShowLineNumbers}
           startLineNumber={startLineNumber}
           onStartLineNumberChange={setStartLineNumber}
+          filename={filename}
+          onFilenameChange={setFilename}
+          showFilename={showFilename}
+          onShowFilenameChange={setShowFilename}
           onCollapseChange={setSidebarCollapsed}
         />
       </div>

@@ -5,7 +5,6 @@ const Header = ({
   isExporting = false, 
   onCopy, 
   isCopying = false, 
-  clipboardSupport, 
   className = '', 
   sidebarCollapsed = false 
 }) => {

@@ -159,7 +159,7 @@ export async function exportCodeAsImage(elementId, settings = {}) {
     }
 
     // Temporarily add canvas to page for debugging
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       const debugCanvas = canvas.cloneNode(true);
       debugCanvas.style.position = 'fixed';
       debugCanvas.style.top = '10px';
@@ -227,6 +227,53 @@ export function downloadBlob(blob, filename) {
 export function generateFilename(language, format) {
   const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
   return `code-snippet-${language}-${timestamp}.${format}`;
+}
+
+// Generate display filename based on language
+export function generateDisplayFilename(language) {
+  const languageExtensions = {
+    'javascript': 'main.js',
+    'js': 'main.js',
+    'typescript': 'main.ts',
+    'ts': 'main.ts',
+    'jsx': 'App.jsx',
+    'tsx': 'App.tsx',
+    'python': 'main.py',
+    'py': 'main.py',
+    'java': 'Main.java',
+    'c': 'main.c',
+    'cpp': 'main.cpp',
+    'c++': 'main.cpp',
+    'csharp': 'Program.cs',
+    'go': 'main.go',
+    'rust': 'main.rs',
+    'php': 'index.php',
+    'ruby': 'main.rb',
+    'swift': 'main.swift',
+    'kotlin': 'Main.kt',
+    'scala': 'Main.scala',
+    'css': 'styles.css',
+    'scss': 'styles.scss',
+    'sass': 'styles.sass',
+    'less': 'styles.less',
+    'json': 'data.json',
+    'bash': 'script.sh',
+    'shell': 'script.sh',
+    'sh': 'script.sh',
+    'powershell': 'script.ps1',
+    'markdown': 'README.md',
+    'md': 'README.md',
+    'html': 'index.html',
+    'xml': 'data.xml',
+    'yaml': 'config.yaml',
+    'yml': 'config.yml',
+    'sql': 'query.sql',
+    'dockerfile': 'Dockerfile',
+    'plaintext': 'file.txt'
+  };
+  
+  const normalizedLanguage = language?.toLowerCase() || 'javascript';
+  return languageExtensions[normalizedLanguage] || 'main.js';
 }
 
 // Browser detection utilities

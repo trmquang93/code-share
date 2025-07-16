@@ -18,6 +18,10 @@ const Sidebar = ({
   onShowLineNumbersChange,
   startLineNumber,
   onStartLineNumberChange,
+  filename,
+  onFilenameChange,
+  showFilename,
+  onShowFilenameChange,
   className = '',
   onCollapseChange
 }) => {
@@ -306,6 +310,39 @@ const Sidebar = ({
                         value={startLineNumber}
                         onChange={(e) => onStartLineNumberChange(Math.max(1, Math.min(999, Number(e.target.value) || 1)))}
                         className="premium-number-input"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Filename Control */}
+                <div className="premium-control-item">
+                  <label className="premium-label">
+                    Filename
+                  </label>
+                  <div className="premium-filename-control">
+                    {/* Toggle Switch */}
+                    <div className="premium-toggle-container">
+                      <span className="premium-toggle-label">Show filename in header</span>
+                      <button
+                        onClick={() => onShowFilenameChange(!showFilename)}
+                        className={`premium-toggle ${showFilename ? 'premium-toggle-on' : 'premium-toggle-off'}`}
+                        role="switch"
+                        aria-checked={showFilename}
+                      >
+                        <span className={`premium-toggle-thumb ${showFilename ? 'premium-toggle-thumb-on' : 'premium-toggle-thumb-off'}`} />
+                      </button>
+                    </div>
+                    
+                    {/* Filename Input */}
+                    <div className={`premium-filename-input-container ${showFilename ? 'premium-filename-input-visible' : 'premium-filename-input-hidden'}`}>
+                      <input
+                        type="text"
+                        value={filename}
+                        onChange={(e) => onFilenameChange(e.target.value)}
+                        className="premium-filename-input"
+                        placeholder="Enter filename..."
+                        disabled={!showFilename}
                       />
                     </div>
                   </div>
