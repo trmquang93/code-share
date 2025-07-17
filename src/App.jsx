@@ -3,10 +3,11 @@ import Header from './components/Header';
 import MacOSWindow from './components/MacOSWindow';
 import CodeEditor from './components/CodeEditor-simple';
 import Sidebar from './components/Sidebar';
+import WatermarkPreview from './components/WatermarkPreview';
 import { sampleCode, placeholderText } from './data/sampleCode';
 import { defaultTheme } from './data/themes';
 import { detectLanguage } from './data/languages';
-import { defaultExportSettings, exportCodeAsImage, downloadBlob, generateFilename, generateDisplayFilename, copyImageToClipboard, checkClipboardSupport } from './utils/exportUtils';
+import { defaultExportSettings, defaultWatermarkSettings, exportCodeAsImage, downloadBlob, generateFilename, generateDisplayFilename, copyImageToClipboard, checkClipboardSupport } from './utils/exportUtils';
 
 function App() {
   const [code, setCode] = useState(sampleCode);
@@ -24,6 +25,7 @@ function App() {
   const [filename, setFilename] = useState('');
   const [isEditingFilename, setIsEditingFilename] = useState(false);
   const [showFilename, setShowFilename] = useState(true);
+  const [watermarkSettings, setWatermarkSettings] = useState(defaultWatermarkSettings);
 
   // Check clipboard support on mount
   useEffect(() => {
@@ -61,7 +63,8 @@ function App() {
       
       const currentLanguage = selectedLanguage || detectLanguage(code);
       const finalExportSettings = {
-        ...exportSettings
+        ...exportSettings,
+        watermark: watermarkSettings
       };
       
       const blob = await exportCodeAsImage('code-preview', finalExportSettings);
@@ -82,7 +85,8 @@ function App() {
     try {
       const finalExportSettings = {
         ...exportSettings,
-        format: 'png' // Always use PNG for clipboard
+        format: 'png', // Always use PNG for clipboard
+        watermark: watermarkSettings
       };
       
       const result = await copyImageToClipboard('code-preview', finalExportSettings);
@@ -228,6 +232,15 @@ function App() {
               />
             </MacOSWindow>
             
+            {/* Watermark Preview Overlay - Always show when enabled */}
+            {watermarkSettings && watermarkSettings.enabled && (
+              <WatermarkPreview 
+                watermarkSettings={watermarkSettings}
+                backgroundColor={exportSettings.backgroundColor}
+                className="watermark-preview-overlay"
+              />
+            )}
+            
             {/* Resize Handle */}
             <div
               style={{
@@ -278,6 +291,8 @@ function App() {
           onFilenameChange={setFilename}
           showFilename={showFilename}
           onShowFilenameChange={setShowFilename}
+          watermarkSettings={watermarkSettings}
+          onWatermarkSettingsChange={setWatermarkSettings}
           onCollapseChange={setSidebarCollapsed}
         />
       </div>

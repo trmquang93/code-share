@@ -1,6 +1,7 @@
 import React from 'react';
 import { exportFormats, defaultExportSettings } from '../utils/exportUtils';
 import BackgroundSelector from './BackgroundSelector';
+import WatermarkPanel from './WatermarkPanel';
 
 const ExportPanel = ({ 
   exportSettings, 
@@ -9,6 +10,8 @@ const ExportPanel = ({
   isExporting = false,
   backgroundColor,
   onBackgroundColorChange,
+  watermarkSettings,
+  onWatermarkSettingsChange,
   className = ''
 }) => {
   const handleSettingChange = (key, value) => {
@@ -65,6 +68,14 @@ const ExportPanel = ({
           </div>
         </div>
       </div>
+
+      {/* Watermark */}
+      <WatermarkPanel
+        watermarkSettings={watermarkSettings}
+        onWatermarkSettingsChange={onWatermarkSettingsChange}
+        exportSettings={exportSettings}
+        className="premium-export-control"
+      />
 
       {/* Format */}
       <div className="premium-export-control">

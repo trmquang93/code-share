@@ -1,8 +1,20 @@
 import html2canvas from 'html2canvas';
+import { getWatermarkColor, getWatermarkFontSize, getWatermarkPosition } from './watermarkUtils';
 
 export const exportFormats = {
   PNG: 'png',
   JPG: 'jpg'
+};
+
+export const defaultWatermarkSettings = {
+  enabled: false,
+  text: '',
+  position: 'bottom-right',
+  size: 'medium',
+  opacity: 0.6,
+  color: 'auto',
+  customColor: '#000000',
+  fontWeight: 'medium'
 };
 
 export const defaultExportSettings = {
@@ -158,9 +170,14 @@ export async function exportCodeAsImage(elementId, settings = {}) {
       throw new Error('Generated canvas has zero dimensions');
     }
 
+    // Apply watermark if enabled
+    const finalCanvas = finalSettings.watermark ? 
+      renderWatermark(canvas, finalSettings.watermark, finalSettings.backgroundColor) : 
+      canvas;
+
     // Temporarily add canvas to page for debugging
     if (import.meta.env.DEV) {
-      const debugCanvas = canvas.cloneNode(true);
+      const debugCanvas = finalCanvas.cloneNode(true);
       debugCanvas.style.position = 'fixed';
       debugCanvas.style.top = '10px';
       debugCanvas.style.right = '10px';
@@ -186,7 +203,7 @@ export async function exportCodeAsImage(elementId, settings = {}) {
     console.log('Converting to blob with format:', format);
     
     return new Promise((resolve, reject) => {
-      canvas.toBlob((blob) => {
+      finalCanvas.toBlob((blob) => {
         if (blob && blob.size > 0) {
           console.log('Blob created successfully, size:', blob.size);
           resolve(blob);
@@ -274,6 +291,62 @@ export function generateDisplayFilename(language) {
   
   const normalizedLanguage = language?.toLowerCase() || 'javascript';
   return languageExtensions[normalizedLanguage] || 'main.js';
+}
+
+// Watermark rendering utilities are now imported from watermarkUtils.js
+
+function renderWatermark(canvas, watermarkSettings, backgroundColor) {
+  if (!watermarkSettings.enabled || !watermarkSettings.text.trim()) {
+    return canvas;
+  }
+
+  // Create a new canvas with watermark
+  const newCanvas = document.createElement('canvas');
+  const ctx = newCanvas.getContext('2d');
+  
+  newCanvas.width = canvas.width;
+  newCanvas.height = canvas.height;
+  
+  // Draw original image
+  ctx.drawImage(canvas, 0, 0);
+  
+  // Setup watermark text
+  const fontSize = getWatermarkFontSize(watermarkSettings.size, canvas.width);
+  const fontWeight = watermarkSettings.fontWeight === 'bold' ? 'bold' : 
+                    watermarkSettings.fontWeight === 'medium' ? '500' : 'normal';
+  
+  ctx.font = `${fontWeight} ${fontSize}px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`;
+  ctx.textBaseline = 'bottom';
+  
+  // Measure text
+  const textMetrics = ctx.measureText(watermarkSettings.text);
+  const textWidth = textMetrics.width;
+  const textHeight = fontSize;
+  
+  // Get position
+  const { x, y } = getWatermarkPosition(
+    watermarkSettings.position,
+    canvas.width,
+    canvas.height,
+    textWidth,
+    textHeight
+  );
+  
+  // Set color and opacity
+  const watermarkColor = getWatermarkColor(watermarkSettings, backgroundColor);
+  ctx.globalAlpha = watermarkSettings.opacity;
+  ctx.fillStyle = watermarkColor;
+  
+  // Add text shadow for better visibility
+  ctx.shadowColor = watermarkColor === '#FFFFFF' ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.3)';
+  ctx.shadowBlur = 2;
+  ctx.shadowOffsetX = 1;
+  ctx.shadowOffsetY = 1;
+  
+  // Draw watermark
+  ctx.fillText(watermarkSettings.text, x, y);
+  
+  return newCanvas;
 }
 
 // Browser detection utilities

@@ -24,6 +24,8 @@ const Sidebar = ({
   onFilenameChange,
   showFilename,
   onShowFilenameChange,
+  watermarkSettings,
+  onWatermarkSettingsChange,
   className = '',
   onCollapseChange
 }) => {
@@ -380,6 +382,8 @@ const Sidebar = ({
                 isExporting={isExporting}
                 backgroundColor={backgroundColor}
                 onBackgroundColorChange={onBackgroundColorChange}
+                watermarkSettings={watermarkSettings}
+                onWatermarkSettingsChange={onWatermarkSettingsChange}
                 className="premium-export-panel"
               />
             </div>
