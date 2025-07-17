@@ -1,0 +1,42 @@
+/* Shared styles and motion preferences */
+
+/* Additional Polish Enhancements */
+@supports (backdrop-filter: blur(10px)) {
+  .premium-sidebar,
+  .premium-section-content,
+  .premium-language-dropdown {
+    background: rgba(255, 255, 255, 0.8);
+  }
+}
+
+/* High DPI Display Optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .premium-theme-preview,
+  .premium-color-swatch {
+    border-width: 1px;
+  }
+}
+
+/* Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  .premium-sidebar,
+  .premium-section-content,
+  .premium-theme-option,
+  .premium-language-button,
+  .premium-export-button,
+  .premium-slider,
+  .premium-toggle,
+  .premium-header,
+  .premium-header-btn {
+    transition: none;
+  }
+  
+  .premium-language-dropdown {
+    animation: none;
+  }
+  
+  .premium-export-spinner,
+  .premium-header-btn-spinner {
+    animation: none;
+  }
+}

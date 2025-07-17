@@ -1,0 +1,382 @@
+/* ===============================
+   WATERMARK COMPONENTS STYLES
+   =============================== */
+
+/* Watermark Panel Container */
+.premium-watermark-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.premium-watermark-control {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.premium-watermark-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.premium-watermark-help {
+  font-size: 12px;
+  color: #6B7280;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+.premium-watermark-notice {
+  background: #FEF3C7;
+  border: 1px solid #F59E0B;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #92400E;
+  margin-bottom: 16px;
+}
+
+/* Text Input */
+.premium-text-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.premium-text-input:focus {
+  outline: none;
+  border-color: #4F46E5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* Position Selector Grid */
+.premium-position-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.premium-position-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 12px;
+  background: #F9FAFB;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+}
+
+.premium-position-option {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  background: white;
+  border: 2px solid #E5E7EB;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.premium-position-option:hover {
+  border-color: #4F46E5;
+  transform: scale(1.05);
+}
+
+.premium-position-option-selected {
+  border-color: #4F46E5;
+  background: #EEF2FF;
+}
+
+.premium-position-dot {
+  width: 8px;
+  height: 8px;
+  background: #D1D5DB;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.premium-position-option-selected .premium-position-dot {
+  background: #4F46E5;
+}
+
+.premium-position-indicator {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.premium-position-preview {
+  text-align: center;
+  padding: 8px;
+}
+
+.premium-position-label {
+  font-size: 12px;
+  color: #6B7280;
+  font-weight: 500;
+}
+
+/* Size Options */
+.premium-size-options {
+  display: flex;
+  gap: 8px;
+}
+
+.premium-size-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.premium-size-option:hover {
+  border-color: #4F46E5;
+  background: #F8FAFF;
+}
+
+.premium-size-option-selected {
+  border-color: #4F46E5;
+  background: #EEF2FF;
+  color: #4F46E5;
+}
+
+.premium-size-radio {
+  display: none;
+}
+
+.premium-size-name {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Color Options */
+.premium-color-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.premium-color-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.premium-color-option:hover {
+  border-color: #4F46E5;
+  background: #F8FAFF;
+}
+
+.premium-color-option-selected {
+  border-color: #4F46E5;
+  background: #EEF2FF;
+}
+
+.premium-color-radio {
+  display: none;
+}
+
+.premium-color-preview {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1px solid #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.premium-color-swatch {
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+}
+
+.premium-color-auto {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.premium-color-auto-light {
+  flex: 1;
+  background: white;
+}
+
+.premium-color-auto-dark {
+  flex: 1;
+  background: #1F2937;
+}
+
+.premium-color-custom {
+  width: 16px;
+  height: 16px;
+  color: #6B7280;
+}
+
+.premium-color-name {
+  font-size: 13px;
+  font-weight: 500;
+  flex: 1;
+}
+
+/* Custom Color Picker */
+.premium-custom-color-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.premium-color-picker {
+  width: 40px;
+  height: 32px;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  cursor: pointer;
+  background: none;
+}
+
+.premium-color-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: 'SF Mono', Monaco, monospace;
+}
+
+.premium-color-input:focus {
+  outline: none;
+  border-color: #4F46E5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* Font Weight Options */
+.premium-weight-options {
+  display: flex;
+  gap: 8px;
+}
+
+.premium-weight-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.premium-weight-option:hover {
+  border-color: #4F46E5;
+  background: #F8FAFF;
+}
+
+.premium-weight-option-selected {
+  border-color: #4F46E5;
+  background: #EEF2FF;
+  color: #4F46E5;
+}
+
+.premium-weight-radio {
+  display: none;
+}
+
+.premium-weight-name {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Watermark Preview Overlay */
+.watermark-preview-overlay {
+  transition: all 0.3s ease;
+}
+
+.watermark-preview {
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  padding: 4px 8px;
+  backdrop-filter: blur(1px);
+  transition: all 0.2s ease;
+}
+
+/* Subtle animation for watermark preview */
+.watermark-preview-overlay:hover {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+/* Ensure watermark doesn't interfere with text selection or interactions */
+.watermark-preview {
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Background container relative positioning */
+#code-preview {
+  position: relative;
+}
+
+/* Responsive Design for Watermark Components */
+@media (max-width: 480px) {
+  .premium-position-grid {
+    gap: 6px;
+    padding: 8px;
+  }
+  
+  .premium-position-option {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .premium-size-options,
+  .premium-weight-options {
+    flex-direction: column;
+  }
+  
+  .premium-color-options {
+    gap: 6px;
+  }
+  
+  .premium-color-option {
+    padding: 6px;
+  }
+  
+  /* Adjust watermark preview for mobile */
+  .watermark-preview {
+    font-size: 12px !important;
+    padding: 1px 4px;
+  }
+}

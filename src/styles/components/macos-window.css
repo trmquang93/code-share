@@ -1,0 +1,84 @@
+/* macOS Window Components */
+.macos-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.macos-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.macos-dot-red {
+  background-color: #FF5F56;
+}
+
+.macos-dot-yellow {
+  background-color: #FFBD2E;
+}
+
+.macos-dot-green {
+  background-color: #27CA3F;
+}
+
+/* Filename Display */
+.macos-filename-container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 300px;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.macos-filename-display {
+  font-size: 13px;
+  font-weight: 500;
+  color: #ffffff;
+  text-align: center;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.macos-filename-display:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.macos-filename-input {
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  text-align: center;
+  border: none;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  width: 100%;
+  min-width: 100px;
+  max-width: 300px;
+}
+
+.code-window {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.code-window-titlebar {
+  height: 48px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  background-color: #2D2D2D;
+  position: relative;
+}
